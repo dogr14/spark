@@ -9,6 +9,8 @@ from operator import add
 # 每个spark应用程序只能创建一个sparkcontext实例 instance
 # 在spark-shell中，sparkcontext对象会自动初始化，并命名为sc
 # 可以直接使用sc来操作RDD，例如加载文件并行化集合
+sc = SparkContext("local","test")
+
 auctionRDD = sc.textFile("input/auctiondata.csv") # type: ignore
 
 auctionRDD.map(lambda x : (x[1],1)).reduceByKey(add).collect()
@@ -50,3 +52,12 @@ reduce(fuc) 使用func聚合RDD中的所有元素 rdd.reduce(lambda a,b:a+b)
 foreach(fuc) 对RDD的每个元素应用func,通常用于输出或副作用操作。 rdd.foreach(lambda x:print(x))
 countByKey() 对键值对RDD 统计每个键的出现次数,返回一个字典
 '''
+
+# auctionRDD.map(lambda x:(x[0],1)).reduceByKey(add).reduce(lambda x,y:x if x[1]>y[1] else y)
+
+
+result = auctionRDD.map(lambda x:(x[0],1)).reduceByKey(add)
+
+resultsort = result.sortBy(lambda x:x[1])
+
+final = resultsort.take(5)

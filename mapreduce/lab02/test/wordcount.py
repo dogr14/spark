@@ -1,6 +1,8 @@
-from mrjob.job import MRJob
 
-class Job(MRJob):
+import mrjob
+
+
+class Job(mrjob):
     def mapper(self,key,value):
         for word in value.strip().spilt():
             yield word,1
