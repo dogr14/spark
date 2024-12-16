@@ -23,7 +23,9 @@ class Problem3:
         pairs = fields.map(lambda x: (x[PostId], set([x[UserId]])))
         # pairs = pairs.map(lambda x: x if None not in x[1] else (x[0], x[1].remove(None)))
         pairs = pairs.map(lambda x: x if "" not in x[1] else (x[0], x[1].remove("")))
+        # 去除空字段
         pairs = pairs.filter(lambda x: True if x[1] else False)
+        # 删除所有没有用户关注的帖子
         res = pairs.reduceByKey(lambda x, y: x | y)
 
         res = res.filter(lambda x: x[1] and len(x[1]) > 10 )
